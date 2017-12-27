@@ -62,6 +62,7 @@ private:
     int mainConsole();
     bool searchHelp();
     void helpMain();
+    bool existPort(QString port);
 
     //Enun Baude
     enum BAUDE{
