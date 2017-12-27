@@ -265,12 +265,11 @@ void Control::on_btnBlink_clicked(){
 
 bool Control::existPort(QString port) {
 
-    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
-        if(port == serialPortInfo.portName()){
+    for(auto &item : QSerialPortInfo::availablePorts()){
+        if(port == item.portName()){
             return true;
         }
     }
-
     return false;
 }
 
