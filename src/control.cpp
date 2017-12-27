@@ -24,8 +24,6 @@ void Control::Open(int argc, char *_argv[], QSerialPort *port){
     auto aux = searchHelp();
 
     if(!aux){
-        //searchBaude();
-        //searchPort();
 
         //test
         searchArguments();
