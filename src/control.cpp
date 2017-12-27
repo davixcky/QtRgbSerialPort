@@ -55,15 +55,14 @@ void Control::run(){
 
 }
 
-Control::~Control()
-{
+Control::~Control(){
     delete ui;
 }
 
 void Control::searchBaude(){
     int argAux;
     BAUDE arBaude[] = { B_300,B_600,B_1200,B_2400,B_4800,B_9600,B_14400,B_19200,B_28800,B_38400,B_57600,B_115200 };
-    auto itBaude;
+    auto itBaude = B_300;
 
     for(int i=0; i<argc; i++){
         if( !strcmp(argv[i],"-b") ){
@@ -260,6 +259,17 @@ void Control::on_btnBlink_clicked(){
         port->write("0");
         delay(1000);
     }
+}
+
+bool Control::existPort(QString port) {
+
+    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
+        if(port == serialPortInfo.portName()){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 
