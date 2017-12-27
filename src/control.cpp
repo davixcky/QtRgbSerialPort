@@ -1,5 +1,4 @@
 #include "control.h"
-#include "ui_control.h"
 
 Control::Control(QWidget *parent) :
     QWidget(parent),
@@ -64,12 +63,12 @@ Control::~Control()
 void Control::searchBaude(){
     int argAux;
     BAUDE arBaude[] = { B_300,B_600,B_1200,B_2400,B_4800,B_9600,B_14400,B_19200,B_28800,B_38400,B_57600,B_115200 };
-    BAUDE itBaude = B_300;
+    auto itBaude;
 
     for(int i=0; i<argc; i++){
         if( !strcmp(argv[i],"-b") ){
-            for(int j=0; j<12; ++j){
-                itBaude = arBaude[j];
+            for (auto &j : arBaude) {
+                itBaude = j;
                 std::istringstream(argv[i+1]) >> argAux;
                 if( itBaude == argAux){
                     Control::baudios = itBaude;
@@ -88,8 +87,8 @@ void Control::searchPort(){
     for(auto i=0; i<argc; i++){
         if(!strcmp(argv[i],"-p")){
             auto aux = argv[i+1];
-            for(auto i=v.begin(); i!=v.end(); i++){
-                if(*i == aux){
+            for (auto &j : v) {
+                if(j == aux){
                     Control::namePort = aux;
                     break;
                 }
@@ -159,21 +158,12 @@ void Control::setConnection(){
 }
 
 bool Control::isAvailable(){
-    if(!port->isWritable()){
-        return false;
-    }
-
-    if(!port->isOpen()){
-        //port->close();
-        return false;
-    }
-
-    return true;
+    return port->isOpen() && port->isWritable();
 }
 
 void Control::delay(int millisecondsToWait ){
 
-    QTime dieTime = QTime::currentTime().addMSecs( millisecondsToWait );
+    auto dieTime = QTime::currentTime().addMSecs(millisecondsToWait );
     while( QTime::currentTime() < dieTime )
     {
         QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
@@ -261,10 +251,6 @@ void Control::desactivateConsole(){         //stop activate
 
 }
 
-void Control::changeName(){
-    ui->btnOn->setText("Hello");
-}
-
 void Control::on_btnBlink_clicked(){
     stopBlink = true;
 
@@ -275,3 +261,6 @@ void Control::on_btnBlink_clicked(){
         delay(1000);
     }
 }
+
+
+

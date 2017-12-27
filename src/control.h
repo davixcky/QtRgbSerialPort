@@ -22,10 +22,10 @@ class Control : public QWidget
     Q_OBJECT
 
 public:
-    explicit Control(QWidget *parent = 0);
+    explicit Control(QWidget *parent = nullptr);
     void Open(int argc, char *argv[], QSerialPort *port);
     void run();
-    ~Control();
+    ~Control() override;
 
 private slots:
 
@@ -37,8 +37,6 @@ private slots:
     void activateConsole();
     void desactivateConsole();
 
-    //test
-    void changeName();
 
 private:
     Ui::Control *ui;
