@@ -25,9 +25,7 @@ void Control::Open(int argc, char *_argv[], QSerialPort *port){
 
     if(!aux){
 
-        //test
         searchArguments();
-
         setConnection();
     }
 
