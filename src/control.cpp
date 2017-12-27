@@ -24,8 +24,12 @@ void Control::Open(int argc, char *_argv[], QSerialPort *port){
     auto aux = searchHelp();
 
     if(!aux){
-        searchBaude();
-        searchPort();
+        //searchBaude();
+        //searchPort();
+
+        //test
+        searchArguments();
+
         setConnection();
     }
 
@@ -57,45 +61,6 @@ void Control::run(){
 
 Control::~Control(){
     delete ui;
-}
-
-void Control::searchBaude(){
-    int argAux;
-    BAUDE arBaude[] = { B_300,B_600,B_1200,B_2400,B_4800,B_9600,B_14400,B_19200,B_28800,B_38400,B_57600,B_115200 };
-    auto itBaude = B_300;
-
-    for(int i=0; i<argc; i++){
-        if( !strcmp(argv[i],"-b") ){
-            for (auto &j : arBaude) {
-                itBaude = j;
-                std::istringstream(argv[i+1]) >> argAux;
-                if( itBaude == argAux){
-                    Control::baudios = itBaude;
-                    break;
-                }
-            }
-            break;
-        }
-    }
-}
-
-void Control::searchPort(){
-    std::vector<QString> v;
-    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
-        v.push_back(serialPortInfo.portName());
-    }
-
-    for(auto i=0; i<argc; i++){
-        if(!strcmp(argv[i],"-p")){
-            auto aux = argv[i+1];
-            for (auto &j : v) {
-                if(j == aux){
-                    Control::namePort = aux;
-                    break;
-                }
-            }
-        }
-    }
 }
 
 int Control::searchGui(){
@@ -284,4 +249,23 @@ bool Control::existBaude(int baude) {
 
     return false;
 }
+
+void Control::searchArguments() {
+    for(auto i=1; i<argc; i++){
+        if(argv[i][0] == '-'){
+            switch (argv[i][1]){
+                case 'p':
+                    namePort = (existPort(argv[i+1])) ? argv[i+1] : nullptr ;
+                    break;
+
+                case 'b':
+                    int argAux;
+                    std::istringstream(argv[i+1]) >> argAux;
+                    baudios = ( existBaude(argAux) ) ? argAux : 0;
+                    break;
+            }
+        }
+    }
+}
+
 
