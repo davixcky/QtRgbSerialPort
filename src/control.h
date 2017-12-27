@@ -52,8 +52,6 @@ private:
     bool guiActivate;
 
     //Methods
-    void searchBaude();
-    void searchPort();
     int searchGui();
     void setConnection();
     bool isAvailable();
@@ -64,6 +62,7 @@ private:
     void helpMain();
     bool existPort(QString port);
     bool existBaude(int baude);
+    void searchArguments();
 
     //Enun Baude
     enum BAUDE{
