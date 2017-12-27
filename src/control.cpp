@@ -71,10 +71,8 @@ void Control::searchBaude(){
                 std::istringstream(argv[i+1]) >> argAux;
                 if( itBaude == argAux){
                     Control::baudios = itBaude;
-                    break;
                 }
             }
-            break;
         }
     }
 }
@@ -274,15 +272,5 @@ bool Control::existPort(QString port) {
     return false;
 }
 
-bool Control::existBaude(int baude) {
-    BAUDE arBaude[] = { B_300,B_600,B_1200,B_2400,B_4800,B_9600,B_14400,B_19200,B_28800,B_38400,B_57600,B_115200 };
 
-    for(auto &item : arBaude){
-        if(baude == item){
-            return true;
-        }
-    }
-
-    return false;
-}
 
