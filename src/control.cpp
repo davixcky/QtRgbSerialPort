@@ -1,4 +1,6 @@
 #include "control.h"
+#include <QCommandLineOption>
+#include <iostream>
 
 Control::Control(QWidget *parent) :
     QWidget(parent),
@@ -7,6 +9,7 @@ Control::Control(QWidget *parent) :
     ui->setupUi(this);
     //connect(m_pButton, SIGNAL (released()),this, SLOT (handleButton()));
     //connect(ui->btnOn, SIGNAL(clicked(bool)), this, SLOT(changeName()));
+
     connect(ui->btnStopConsole, SIGNAL(clicked(bool)), this, SLOT(desactivateConsole()));
     connect(ui->btnConsole, SIGNAL(clicked(bool)), this, SLOT(activateConsole()));
 
@@ -16,15 +19,17 @@ Control::Control(QWidget *parent) :
 
 }
 
-void Control::Open(int argc, char *_argv[], QSerialPort *port){
+void Control::Open(int argc, char *_argv[], QSerialPort *port) {
+
     this->port = port;
     this->argc = argc;
-    argv = _argv;
+    this->argv = _argv;
+
 
     auto aux = searchHelp();
 
     if(!aux){
-
+        qDebug() << "Buscando argumentos y seteando conexion";
         searchArguments();
         setConnection();
     }
@@ -83,6 +88,7 @@ bool Control::searchHelp(){
             break;
         }
     }
+    return false;
 }
 
 void Control::helpMain(){
@@ -150,6 +156,7 @@ void Control::runConsole(){
                 break;
             }
         }
+
     }
 
 }
@@ -218,16 +225,17 @@ void Control::on_btnBlink_clicked(){
 
     while(stopBlink){
         port->write("1");
-        delay(1000);
+        delay(3000);
         port->write("0");
-        delay(1000);
+        delay(2000);
     }
 }
 
 bool Control::existPort(QString port) {
 
-    for(auto &item : QSerialPortInfo::availablePorts()){
-        if(port == item.portName()){
+    foreach(auto &SerialPortInfo , QSerialPortInfo::availablePorts()){
+        qDebug() << SerialPortInfo.portName();
+        if(port == SerialPortInfo.portName()){
             return true;
         }
     }
@@ -257,7 +265,7 @@ void Control::searchArguments() {
                 case 'b':
                     int argAux;
                     std::istringstream(argv[i+1]) >> argAux;
-                    baudios = ( existBaude(argAux) ) ? argAux : 0;
+                    baudios = ( existBaude(argAux) ) ? argAux : 9600;
                     break;
             }
         }
